@@ -11,7 +11,7 @@ source passwords.sh # Get values for $MARIADB_ROOT_PASSWORD, $MW_DB_PASSWORD and
 
 # Silently install Apache, PHP, php5-mysql and git
 apt-get update
-apt-get install --yes --no-install-recommends apache2 php5 php5-mysql git
+apt-get install --yes apache2 php5 php5-mysql git
 
 # Install MariaDB with preconfigured passwords
 echo "mysql-server-5.5 mysql-server/root_password password $MARIADB_ROOT_PASSWORD" | debconf-set-selections
