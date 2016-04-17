@@ -1,24 +1,29 @@
 #!/bin/bash
+set -e
 export DEBIAN_FRONTEND=noninteractive
 
-source passwords.sh
+source passwords.sh # Get values for $MARIADB_ROOT_PASSWORD, $MW_DB_PASSWORD and $MW_ADMIN_PASSWORD
 
+# Silently install Apache, PHP, php5-mysql and git
 apt-get update
-apt-get install -y apache2 php5 php5-mysql git
+apt-get install --yes --no-install-recommends apache2 php5 php5-mysql git
 
+# Install MariaDB with preconfigured passwords
 echo "mysql-server-5.5 mysql-server/root_password password $MARIADB_ROOT_PASSWORD" | debconf-set-selections
 echo "mysql-server-5.5 mysql-server/root_password_again password $MARIADB_ROOT_PASSWORD" | debconf-set-selections
-apt-get install -y mariadb-server
+apt-get install --yes mariadb-server
 
+# Pass the database password to MariaDB as a variable and run the database setup script
 mysql -uroot -p$MARIADB_ROOT_PASSWORD -e "SET @mw_db_password='$MW_DB_PASSWORD'; source setup.sql;"
 
+# Clone MediaWiki, the vendor repository and Vector
 cd /var/www/html
-git clone https://gerrit.wikimedia.org/r/p/mediawiki/core.git
-mv core w
+git clone https://gerrit.wikimedia.org/r/p/mediawiki/core.git ./w
 cd w
 git clone https://gerrit.wikimedia.org/r/p/mediawiki/vendor.git
 cd skins
 git clone https://gerrit.wikimedia.org/r/p/mediawiki/skins/Vector.git
 cd ..
 
+# Run the MediaWiki install script
 php maintenance/install.php --dbname mediawiki --dbuser mediawiki --dbpass $MW_DB_PASSWORD --scriptpath '/w' --pass $MW_ADMIN_PASSWORD 'Test wiki' admin
