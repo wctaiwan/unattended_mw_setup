@@ -2,6 +2,11 @@
 set -e
 export DEBIAN_FRONTEND=noninteractive
 
+if [ "$EUID" -ne 0 ]
+	then echo "The setup script needs to be run as root"
+	exit
+fi
+
 source passwords.sh # Get values for $MARIADB_ROOT_PASSWORD, $MW_DB_PASSWORD and $MW_ADMIN_PASSWORD
 
 # Silently install Apache, PHP, php5-mysql and git
