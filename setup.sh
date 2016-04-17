@@ -9,6 +9,11 @@ fi
 
 source passwords.sh # Get values for $MARIADB_ROOT_PASSWORD, $MW_DB_PASSWORD and $MW_ADMIN_PASSWORD
 
+if [ "$MARIADB_ROOT_PASSWORD" == 'pw1' ]
+	then echo "Please specify passwords in passwords.sh"
+	exit
+fi
+
 # Silently install Apache, PHP, php5-mysql and git
 apt-get update
 apt-get install --yes apache2 php5 php5-mysql git
