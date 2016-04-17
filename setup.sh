@@ -23,11 +23,11 @@ mysql -uroot -p$MARIADB_ROOT_PASSWORD -e "SET @mw_db_password='$MW_DB_PASSWORD';
 
 # Clone MediaWiki, the vendor repository and Vector
 cd /var/www/html
-git clone https://gerrit.wikimedia.org/r/p/mediawiki/core.git ./w
+git clone --depth 1 https://gerrit.wikimedia.org/r/p/mediawiki/core.git ./w
 cd w
-git clone https://gerrit.wikimedia.org/r/p/mediawiki/vendor.git
+git clone --depth 1 https://gerrit.wikimedia.org/r/p/mediawiki/vendor.git
 cd skins
-git clone https://gerrit.wikimedia.org/r/p/mediawiki/skins/Vector.git
+git clone --depth 1 https://gerrit.wikimedia.org/r/p/mediawiki/skins/Vector.git
 cd ..
 
 # Run the MediaWiki install script
